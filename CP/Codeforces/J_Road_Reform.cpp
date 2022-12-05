@@ -39,22 +39,24 @@ public:
 
 void solve(){
     int n, m; ll k; cin >> n >> m >> k;
-    DSU dsu(n);
     vector<node>khela;
     for(int i = 0; i < m; i += 1){
-        node dummy; cin >> dummy.x >> dummy.y >> dummy.weight; dummy.weight = max((ll)0, dummy.weight - k);
+        node dummy; cin >> dummy.x >> dummy.y >> dummy.weight;
         khela.emplace_back(dummy);
     }
 
     sort(khela.begin(), khela.end());
-    ll mnCost = 0;
-    for(node n: khela){
-        if(dsu.findRepresentative(n.x) != dsu.findRepresentative(n.y)){
-            dsu.unionSet(n.x, n.y);
-            mnCost += n.weight; 
+    ll mnCost = 0, cnt = 0, mn = INT_MAX; DSU dsu(n);
+    for(node nde: khela){
+        if(dsu.findRepresentative(nde.x) != dsu.findRepresentative(nde.y)){
+            if(cnt == n - 2){
+                mn = min(mn, abs(k - nde.weight)); continue;
+            }
+            dsu.unionSet(nde.x, nde.y);
+            mnCost += max((ll)0, nde.weight - k); cnt += 1;
         }
     }
-    cout << mnCost << '\n';
+    cout << mnCost + mn << '\n';
 }
 
 int main(void){
