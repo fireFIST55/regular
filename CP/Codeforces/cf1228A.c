@@ -1,0 +1,105 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+int main(void)
+{
+    char l[100001],x[100001],r[100001];
+    scanf("%s",l);
+    scanf("%s",r);
+    int i,j,k,y,sig,a,b,num,num1,temp,length1=strlen(l),length2=strlen(r);
+    for(i=0,y=0;i<length1;i++)
+    {
+        for(j=0;j<length1;j++)
+        {
+            if(i!=j)
+            {
+                if(l[i]==l[j])
+                {
+                    y++;
+                }
+            }
+        }
+    }
+    if(y==0)
+    {
+        printf("%s",l);
+        return 0;
+    }
+    else
+    {
+        for(i=0,y=0;i<length2;i++)
+        {
+            for(j=0;j<length2;j++)
+            {
+                if(i!=j)
+                {
+                    if(x[i]==x[j])
+                    {
+                        y++;
+                    }
+                }
+            }
+        }
+        if(y==0)
+        {
+            printf("%s\n",r);
+            return 0;
+        }
+    }
+    for(i=0,j=length1-1;i<length1,j>=0;i++,j--)
+    {
+        for(k=0,temp=1;k<j;k++)
+        {
+            temp*=10;
+        }
+        if(i>0)
+        {
+            num+=temp*(l[i]-48);
+        }
+        else
+        {
+            num=temp*(l[i]-48);
+        }
+    }
+    for(i=0,j=length2-1;i<length2,j>=0;i++,j--)
+    {
+        for(k=0,temp=1;k<j;k++)
+        {
+            temp*=10;
+        }
+        if(i>0)
+        {
+            num1+=temp*(r[i]-48);
+        }
+        else
+        {
+            num1=temp*(r[i]-48);
+        }
+    }
+    for(i=0;num<num1;i++)
+    {
+        num+=1;
+        itoa(num,x,10);
+        for(j=0,sig=0;x[j]!='\0';j++)
+        {
+            y=x[j];
+            for(k=0;x[k]!='\0';k++)
+            {
+                if(j!=k)
+                {
+                    if(x[k]==x[j])
+                    {
+                        sig++;
+                    }
+                }
+            }
+        }
+        if(sig==0)
+        {
+            printf("%s\n",x);
+            return 0;
+        }
+    }
+    printf("-1\n");
+    return 0;
+}

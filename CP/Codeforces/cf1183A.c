@@ -1,0 +1,111 @@
+#include<stdio.h>
+#include<string.h>
+int main(void)
+{
+    char string[5];
+    gets(string);
+    int i,j,a,b,k,x,remainder,sum=0,array[4],length=strlen(string);
+    x=length-1;
+    for(i=0;string[i]!='\0';i++)
+    {
+        array[i]=string[i]-48;
+        sum+=array[i];
+    }
+    if(sum%4==0)
+    {
+        for(i=0;i<strlen(string);i++)
+        {
+            printf("%d",array[i]);
+        }
+    }
+    else if(length==1)
+    {
+        for(;;)
+        {
+            array[0]+=1;
+            if(array[0]%10==0)
+            {
+                if(array[0]%4==0)
+                {
+                    printf("%d",array[0]);
+                    break;
+                }
+            }
+            else
+            {
+                a=array[0]/10;
+                b=array[0]-a*10;
+                if((a+b)%4==0)
+                {
+                    printf("%d",array[0]);
+                    break;
+                }
+            }
+        }
+    }
+    else
+    {
+        remainder=sum%4;
+        if(array[length-1]+(4-remainder)<10)
+        {
+            array[length-1]+=(4-remainder);
+            for(i=0;i<length;i++)
+            {
+                printf("%d",array[i]);
+            }
+        }
+        else
+        {
+            for(i=0;;i++)
+            {
+                for(j=length-1;;)
+                {
+                    array[j]+=1;
+                    if(array[j]>9)
+                    {
+                        array[j]=0;
+                        for(k=j-1;k>=0;k--)
+                        {
+                            if(array[k+1]==0&&k==0)
+                            {
+                                array[k]+=1;
+                                if(array[k]>9)
+                                {
+                                    array[k]=1;
+                                    j+=1;
+                                    array[j]=0;
+                                    x=length;
+                                }
+                            }
+                            else if(array[k+1]==0)
+                            {
+                                array[k]+=1;
+                                if(array[k]>9)
+                                {
+                                    array[k]=0;
+                                }
+                            }
+                            else
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    for(k=0,sum=0;k<=x;k++)
+                    {
+                        sum+=array[k];
+                    }
+                    if(sum%4==0)
+                    {
+                        for(k=0;k<=x;k++)
+                        {
+                            printf("%d",array[k]);
+                        }
+                        return 0;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}

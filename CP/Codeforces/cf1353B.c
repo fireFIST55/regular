@@ -1,0 +1,68 @@
+#include<stdio.h>
+int main(void)
+{
+    int i,j,n,k,t,m,max,min,sum=0;
+    scanf("%d",&t);
+    int array[35],array1[35],dummy[35],dummy1[t],answers[t];
+    for(i=0;i<t;i++)
+    {
+        scanf("%d %d",&n,&k);
+        for(j=0;j<n;j++)
+        {
+            scanf("%d",&array[j]);
+        }
+        for(j=0;j<n;j++)
+        {
+            scanf("%d",&array1[j]);
+        }
+        for(m=0;m<n;m++)
+        {
+            min=array[m];
+            for(j=m+1;j<n;j++)
+            {
+                min=min<array[j]?min:array[j];
+            }
+            for(j=m+1;j<n;j++)
+            {
+                if(min==array[j])
+                {
+                    array[j]=array[m];
+                    array[m]=min;
+                }
+            }
+        }
+        for(m=0;m<n;m++)
+        {
+            max=array1[m];
+            for(j=m+1;j<n;j++)
+            {
+                max=max>array1[j]?max:array1[j];
+            }
+            for(j=m+1;j<n;j++)
+            {
+                if(max==array1[j])
+                {
+                    array1[j]=array1[m];
+                    array1[m]=max;
+                }
+            }
+        }
+        for(j=0;j<k;j++)
+        {
+            if(array1[j]>array[j])
+            {
+                array[j]=array1[j];
+            }
+        }
+        for(j=0,sum=0;j<n;j++)
+        {
+            sum+=array[j];
+        }
+        answers[i]=sum;
+    }
+    for(i=0;i<t;i++)
+    {
+        printf("%d\n",answers[i]);
+    }
+    return 0;
+}

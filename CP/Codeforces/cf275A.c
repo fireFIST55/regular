@@ -1,0 +1,57 @@
+#include<stdio.h>
+int main(void)
+{
+    int i,j,a;
+    char grid[3][4];
+    for(i=0;i<3;i++)
+    {
+        for(j=0;j<3;j++)
+            grid[i][j]='1';
+        grid[i][j]='\0';
+    }
+    for(i=0;i<3;i++)
+    {
+        for(j=0;j<3;j++)
+        {
+            scanf("%d",&a);
+            if((a&1))
+            {
+                if(grid[i][j]=='0')
+                    grid[i][j]='1';
+                else
+                    grid[i][j]='0';
+                if(j+1<3)
+                {
+                    if(grid[i][j+1]=='0')
+                        grid[i][j+1]='1';
+                    else
+                        grid[i][j+1]='0';
+                }
+                if(j-1>=0)
+                {
+                    if(grid[i][j-1]=='0')
+                        grid[i][j-1]='1';
+                    else
+                        grid[i][j-1]='0';
+                }
+                if(i+1<3)
+                {
+                    if(grid[i+1][j]=='0')
+                        grid[i+1][j]='1';
+                    else
+                        grid[i+1][j]='0';
+                }
+                if(i-1>=0)
+                {
+                    if(grid[i-1][j]=='0')
+                        grid[i-1][j]='1';
+                    else
+                        grid[i-1][j]='0';
+                }
+            }
+        }
+    }
+    for(i=0;i<3;i++)
+        printf("%s\n",grid[i]);
+    return 0;
+}

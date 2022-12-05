@@ -1,0 +1,54 @@
+#include<stdio.h>
+#include<math.h>
+int main(void)
+{
+    int i,j,max,k=2,k1,k2,x,y,n,count=0;
+    scanf("%d",&n);
+    int a[n];
+    if(n<=5)
+        printf("%d\n",0);
+    else
+    {
+        a[0]=2;
+        a[1]=3;
+        for(i=1;;i++)
+        {
+            x=6*i-1;
+            y=6*i+1;
+            if(y>=n||x>=n)
+                break;
+            max=sqrt(x)>sqrt(y)?sqrt(x):sqrt(y);
+            for(j=2,k1=0,k2=0;j<=max;j++)
+            {
+                if(!(x%j))
+                    k1=1;
+                if(!(y%j))
+                    k2=1;
+                if(k1&&k2)
+                    break;
+            }
+            if(!k1)
+            {
+                a[k]=x;
+                k++;
+            }
+            if(!k2)
+            {
+                a[k]=y;
+                k++;
+            }
+        }
+        for(i=6;i<=n;i++)
+        {
+            for(j=0,x=0;i>a[j]&&j<k;j++)
+            {
+                if(!(i%a[j]))
+                    x++;
+            }
+            if(x==2)
+                count++;
+        }
+        printf("%d\n",count);
+    }
+    return 0;
+}

@@ -1,0 +1,59 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(void)
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    int i,j,t,n,raze,breach;
+    cin>>t;
+    for(i=0;i<t;i++)
+    {
+        cin>>n;
+        raze=1;
+        breach=1;
+        char string[n+3];
+        cin>>string;
+        if(n>1)
+        {
+            if(n&1)
+            {
+                for(j=0;j<n;j+=2)
+                {
+                    if((string[j]-48)&1)
+                    {
+                        breach=0;
+                        break;
+                    }
+                }
+                if(raze&&breach)
+                    raze=0;
+            }
+            else
+            {
+                for(j=1;j<n;j+=2)
+                {
+                    if(!((string[j]-48)&1))
+                    {
+                        raze=0;
+                        break;
+                    }
+                }
+                if(raze&&breach)
+                    breach=0;
+            }
+        }
+        else
+        {
+            if((string[0]-48)&1)
+                breach=0;
+            else
+                raze=0;
+        }
+        if(raze)
+            cout<<1;
+        else
+            cout<<2;
+        cout<<"\n";
+    }
+    return 0;
+}

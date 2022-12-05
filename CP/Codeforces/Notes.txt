@@ -1,0 +1,74 @@
+SPECIAL PROBLEMS: ***cf1373D(dp) **cf1625C(dp) **cf1005D(dp, find maximum number of subarrays divisible by 3) **dp(D_Yet_Another_Minimization_Problem.cpp)
+***D_Count_GCD.cpp (number theory: number of integers that is gcd to 1 with an integer)
+
+1.  string s;
+    int totalSeg = unique(s.begin(), s.end()) - s.begin();
+    whith this we can get how many unique substring there is for example for 110011 we'll get 3 here
+2. vector<string>ans(n, string(n, '='));
+    This will create vector of n strings where all the characters are =
+
+3. There is a prime in every [n, 3n/2] range
+
+4. sum of 0 2 4 6 / 0 3 6 9 ... n = n*(3 - 1)/2
+
+5. Upper range of number of divisors 3sqrt(n);
+
+6. When there's a range of answers bs can be an option to find the desired one.
+
+
+
+
+
+
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+using namespace std;
+
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+
+7. How to write a function within a function (this will help us with the initialization problem)
+function<void(int, int, int last)>dfs = [&](int u, int v, int last){
+    for(int x: vp[u]){
+        if(x != v){
+            if(last == 2){
+                ans[ind[{max(u, x), min(u, x)}]] = 5;
+                dfs(x, u, 5);
+            }
+            else{
+                ans[ind[{max(u, x), min(u, x)}]] = 2;
+                dfs(x, u, 2);
+            }
+        }
+    }
+};
+
+implementation cf1627C
+
+8. How to use lower_bound on pairs
+   pair<int, int> pi = {vp[i].second, - 1};
+   ans -= vp.end() - lower_bound(vp.begin(), vp.end(), pi);
+
+   implementaion on cf1248B.cpp
+   
+9. If i want to add something in middle of a string and keep everything else same
+   strng s;
+   s.insert(pos, string(cnt, '1'));
+   here cnt amount of 1 will be added in the pos position.
+
+   implementation cf1009B
+
+10. Repetetion consider korte hole combination er khetre cf cf1288C
+
+11. Use of lower_bound cf1203D1 cf1234D
+
+12. for k <= 43, there are numbers n where i -> (1..k) doesn't divide cf 922CS
+
+13. every even number no more than 10e9 can be expressed as sum of two prime numbers and every odd number n if n - 2 is 
+    prime than can be expressed as sum of two otherwise 3 numbers.
+
+14. If there are two variables lets say sign and integer. for instance lets say we have an array
+we want to choose a few integers from them and they can either be pos or neg. then: 
+D_Array_Differentiation.cpp

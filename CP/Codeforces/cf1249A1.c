@@ -1,0 +1,53 @@
+#include<stdio.h>
+int main(void)
+{
+    int q,n,min,array[100];
+    scanf("%d",&q);
+    int i,j,k,count,answers[q];
+    for(i=0;i<q;i++)
+    {
+        scanf("%d",&n);
+        for(j=0;j<n;j++)
+        {
+            scanf("%d",&array[j]);
+        }
+        for(j=0;j<n-1;j++)
+        {
+            min=array[j];
+            for(k=j+1;k<n;k++)
+            {
+                min=min<array[k]?min:array[k];
+            }
+            for(k=j+1;k<n;k++)
+            {
+                if(array[k]==min)
+                {
+                    array[k]=array[j];
+                    array[j]=min;
+                    break;
+                }
+            }
+        }
+        for(j=1,count=0;j<n;j++)
+        {
+            if(array[j]-array[j-1]==1)
+            {
+                count++;
+            }
+        }
+        if(count==0)
+        {
+            count+=1;
+        }
+        else
+        {
+            count=2;
+        }
+        answers[i]=count;
+    }
+    for(i=0;i<q;i++)
+    {
+        printf("%d\n",answers[i]);
+    }
+    return 0;
+}

@@ -1,0 +1,51 @@
+#include<stdio.h>
+int main(void)
+{
+    int i,j,k,x,n,min,temp,t,array[50],answers[50];
+    scanf("%d",&t);
+    int answrs[t];
+    for(x=0;x<t;x++)
+    {
+        scanf("%d",&n);
+        for(k=0;k<n;k++)
+        {
+            scanf("%d",&array[k]);
+        }
+        for(i=0;i<n-1;i++)
+        {
+            min=array[i];
+            for(j=i+1;j<n;j++)
+            {
+                min=min<array[j]?min:array[j];
+            }
+            for(j=i+1;j<n;j++)
+            {
+                if(array[j]==min)
+                {
+                    array[j]=array[i];
+                    array[i]=min;
+                }
+            }
+        }
+        for(i=0;i<n;i++)
+        {
+            if(i+1!=n)
+            {
+                answers[i]=array[i+1]-array[i];
+            }
+            else
+                answers[i]=array[i];
+        }
+        min=answers[0];
+        for(i=1;i<n;i++)
+        {
+            min=min<answers[i]?min:answers[i];
+        }
+        answrs[x]=min;
+    }
+    for(i=0;i<t;i++)
+    {
+        printf("%d\n",answrs[i]);
+    }
+    return 0;
+}

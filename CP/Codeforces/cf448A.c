@@ -1,0 +1,41 @@
+#include<stdio.h>
+int main(void)
+{
+    int i,shelf=0,total=0,a,b,n;
+    for(i=0;i<3;i++)
+    {
+        scanf("%d",&a);
+        total+=a;
+    }
+    if(total%5==0)
+    {
+        shelf=total/5;
+    }
+    else
+    {
+        shelf=total/5+1;
+    }
+    for(i=0,total=0;i<3;i++)
+    {
+        scanf("%d",&a);
+        total+=a;
+    }
+    if(total%10==0)
+    {
+        shelf+=total/10;
+    }
+    else
+    {
+        shelf+=total/10+1;
+    }
+    scanf("%d",&n);
+    if(shelf<=n)
+    {
+        printf("YES");
+    }
+    else
+    {
+        printf("NO");
+    }
+    return 0;
+}

@@ -1,0 +1,77 @@
+#include<stdio.h>
+int main(void)
+{
+    int i,j,k,t,l,x,z1,z2,m,n,p1,p2,max,count;
+    scanf("%d",&t);
+    for(i=0;i<t;i++)
+    {
+        scanf("%d",&n);
+        int array[n],extra[n],freq[200000]={0};
+        char string[n+3];
+        string[0]='1';
+        string[n-1]='1';
+        for(j=0,m=0,count=2;j<n;j++)
+        {
+            scanf("%d",&array[j]);
+            freq[array[j]-1]++;
+            extra[j]=j;
+            if(array[j]==1)
+            {
+                m=1;
+                x=j;
+            }
+            else if(m&&j>x)
+            {
+                if(!extra[count-2])
+                    extra[count-1]-=(count-2);
+                else
+                    extra[count-1]-=(count-2-extra[count-2]);
+                if(freq[count-1])
+
+            }
+        }
+        while(count<n)
+        {
+            if(!extra[count-2])
+                extra[count-1]-=(count-2);
+            else
+                extra[count-1]-=(count-2-extra[count-2]);
+            for(z1=0,z2=0;;)
+            {
+                if(array[k]<=count&&!z1&&k>=0)
+                {
+                    extra[count-1]--;
+                    array[k]=n+1;
+                    if(k-1>=0)
+                        k--;
+                }
+                else
+                    z1=1;
+                if(z1&&z2)
+                    break;
+                if(!extra[count-1])
+                    break;
+                if(array[l]<=count&&!z2&&l<n)
+                {
+                    extra[count-1]--;
+                    array[l]=n+1;
+                    if(l+1<n)
+                        l++;
+                }
+                else
+                    z2=1;
+                if(z1&&z2)
+                    break;
+                if(!extra[count-1])
+                    break;
+            }
+            if(!extra[count-1])
+                string[count-1]='1';
+            else
+                string[count-1]='0';
+            count++;
+        }
+        string[n]='\0';
+        printf("%s\n",string);
+    }
+}

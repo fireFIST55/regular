@@ -1,0 +1,127 @@
+#include<stdio.h>
+int main(void)
+{
+    int i,j,k,t,l,x,y,z,z1,z2,m,n,max,count;
+    scanf("%d",&t);
+    for(i=0;i<t;i++)
+    {
+        int freq[200000]={0};
+        scanf("%d",&n);
+        int array[n],pos[n],extra[n];
+        char string[n+3];
+        string[0]='1';
+        string[n-1]='1';
+        count=2;
+        for(j=0,m=0,y=0;j<n;j++)
+        {
+            scanf("%d",&array[j]);
+            pos[array[j]-1]=j;
+            freq[array[j]-1]++;
+            extra[j]=j;
+            if(array[j]==1)
+            {
+                m=1;
+                x=j;
+                if(j-1>=0)
+                    k=j-1;
+                else
+                    k=-1;
+                if(j+1<n)
+                    l=j+1;
+                else
+                    l=-1;
+            }
+            else if(m&&j>x)
+            {
+                for(y=count,z=count,z1=0,z2=0;k>=0||l<n;)
+                {
+                    if(array[k]<=count&&!z1)
+                    {
+                        if(array[k]<count)
+                        {
+                            extra[count-1]--;
+                            printf("Ekhane dhukse.\t%d\n",array[k]);
+                        }
+                        y--;
+                    }
+                    else if(array[k]>count)
+                        z1=1;
+                    printf("First:%d\tSecond:%d\tThird:%d\tZ1:%d\tZ2:%d\n",extra[count-1],extra[extra[count-1]],y,z1,z2);
+                    if(!extra[count-1]||!extra[extra[count-1]]||!y||(z1==1&&z2==1))
+                    {
+                        extra[count-1]=0;
+                        break;
+                    }
+                    if(array[l]<=count&&!z2)
+                    {
+                        if(array[l]<count)
+                            extra[count-1]--;
+                        z--;
+                    }
+                    else if(array[l]>count)
+                        z2=1;
+                    printf("First:%d\tSecond:%d\tThird\tZ1:%d\tZ2:%d\n",extra[count-1],extra[extra[count-1]],z,z1,z2);
+                    if(!extra[count-1]||!extra[extra[count-1]]||!z||(z1==1&&z2==1))
+                    {
+                        extra[count-1]=0;
+                        break;
+                    }
+                    printf("Z1:%d\tZ2:%d\n",z1,z2);
+                    if((l+1)-x>count&&l+1<j&&!z2)
+                        l++;
+                    if(x-(k-1)>count&&k-1>=0&&!z1)
+                        k--;
+                }
+                if(!extra[count-1])
+                    string[count-1]='1';
+                else
+                    string[count-1]='0';
+                printf("j:%d\tk:%d\tl:%d\tResult:%d\tCount:%d\n",j,k,l,extra[count-1],count);
+                count++;
+            }
+        }
+        while(count<=n)
+        {
+            for(y=count,z=count,z1=0,z2=0;extra[count-1]!=0;)
+            {
+                if(array[k]<=count&&!z1)
+                {
+                    if(array[k]<count)
+                        extra[count-1]--;
+                    y--;
+                }
+                else if(array[k]>count)
+                    z1=1;
+                if(!extra[count-1]||!extra[extra[count-1]]||!y||(z1==1&&z2==1))
+                {
+                    extra[count-1]=0;
+                    break;
+                }
+                if(array[l]<=count&&!z2)
+                {
+                    if(array[l]<count)
+                        extra[count-1]--;
+                    z--;
+                }
+                else if(array[l]>count)
+                    z2=1;
+                if(!extra[count-1]||!extra[extra[count-1]]||!z||(z1==1&&z2==1))
+                {
+                    extra[count-1]=0;
+                    break;
+                }
+                if((l+1)-x>count&&l+1<n&&!z2)
+                    l++;
+                if(x-(k-1)>count&&k-1>=0&&!z1)
+                    k--;
+            }
+            if(!extra[count-1])
+                string[count-1]='1';
+            else
+                string[count-1]='0';
+            count++;
+        }
+        string[n]='\0';
+        printf("%s\n",string);
+    }
+}
