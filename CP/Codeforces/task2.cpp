@@ -1,33 +1,19 @@
-#include<bits/stdc++.h>
-#define ll long long
+#include <bits/stdc++.h>
 using namespace std;
 
-string s;
-int n;
-void perm(int curr, int r, string str){
-    if(curr == n){
-        cout << str << '\n';
-        return;
-    }
-    for(int i = r; i < n; i += 1){
-        perm(curr + 1, i + 1,(str + s[i]));
-    }
+void permute(string a, int l, int r){
+	if (l == r) cout << a << ' ';
+	else {
+		for (int i = l; i <= r; i += 1) {
+			swap(a[l], a[i]);
+			permute(a, l + 1, r);
+			swap(a[l], a[i]);
+		}
+	}
 }
 
-void solve(){
-    cin >> s; n = s.length();
-    perm(0, 0, "");
-}
-
-int main(void){
-    ios_base::sync_with_stdio(false); 
-    cin.tie(NULL);
-
-    int t = 1;
-    //cin >> t;
-
-    while(t--)
-        solve();
-    
-    return 0;
+int main(){
+	string str; cin >> str; int n = str.length();
+	permute(str, 0, n - 1);
+	return 0;
 }

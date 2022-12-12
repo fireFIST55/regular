@@ -1,12 +1,17 @@
 #include<bits/stdc++.h>
 #define ll long long
 using namespace std;
+vector<int>fact(1005);
+
+void func(int i, int n){
+    if(i > n) return;
+    fact[i] = fact[i - 1] + i;
+    func(i + 1, n);
+}
 
 void solve(){
-    set<int>st;
-    for(int i = 1; i <= 5; i += 1) st.insert(i);
-    auto it = st.end(); it--;
-    cout << *it << endl;
+    int n; cin >> n;
+    func(1, n); cout << fact[n] << '\n';
 }
 
 int main(void){

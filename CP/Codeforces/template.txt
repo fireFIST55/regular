@@ -1,0 +1,360 @@
+// Ordered Set
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
+
+
+ // DSU
+ class dsu{
+public:
+    vector<int>parent, size;
+    dsu(int n){
+        size.resize(n+1, 1);
+        parent.resize(n+1);
+        for(int i = 1; i<=n; i++)
+            parent[i] = i;
+    }
+    int findRepresentative(int u){
+        if(u == parent[u])  return u;
+        else return parent[u] = findRepresentative( parent[u] );
+    }
+    void unionSet(int a, int b){
+        a = findRepresentative(a);
+        b = findRepresentative(b);
+        if(a != b){
+            if(size[b] > size[a])   swap(a, b);
+            parent[b] = a;
+            size[a] += size[b];
+        }
+    }
+};
+
+
+
+//lazy bitch
+class lazyP{
+    vector<int>vc, tree, lazy;
+public:
+    lazyP(int n){
+        tree.assign(4 * n, 0);
+        lazy.assign(4 * n, 0);
+    }
+
+    inline void push(int node, int b, int e){
+        if(!lazy[node]) return;
+        tree[node] = tree[node] + (e - b + 1) * lazy[node];
+        if(b != e){
+            lazy[node << 1] += lazy[node];
+            lazy[((node << 1) | 1)] += lazy[node];
+        }
+
+        lazy[node] = 0;
+    }
+
+    void pull(int node, int left, int right){
+        tree[node] = tree[left] + tree[right];
+    }
+
+    void build(int node, int b, int e){
+        lazy[node] = 0;
+        if(b == e){
+            tree[node] = vc[b];
+            return;
+        }
+
+        int mid = (b + e) >> 1, left = node << 1, right = left | 1;
+        build(left, b, mid); build(right, mid + 1, e);
+        pull(node, left, right);
+    }
+
+    void update(int node, int b, int e, int i, int j, int value){
+        push(node, b, e);
+        if(i > e || j < b) return;
+        if(b >= i && e <= j){
+            lazy[node] = value;
+            push(node, b, e);
+            return;
+        }
+
+        int mid = (b + e) >> 1, left = node << 1, right = left | 1;
+        update(left, b, mid, i, j, value); update(right, mid + 1, e, i, j, value);
+        pull(node, left, right);
+    }
+
+    int query(int node, int b, int e, int i, int j){
+        push(node, b, e);
+        if(i > e || j < b) return 0;
+        if(b >= i && e <= j) return tree[node];
+
+        int mid = (b + e) >> 1, left = node << 1, right = left | 1;
+        return (query(left, b, mid, i, j) + query(right, mid + 1, e, i, j));
+    }
+};
+
+
+
+//segment tree
+class segTree{
+    vector<int>vc, tree;
+    void build(int node, int b, int e){
+        if(b == e){
+            tree[node] = vc[b];
+            return;
+        }
+
+        int mid = (b + e) >> 1, left = node << 1, right = left | 1;
+        build(left, b, mid); build(right, mid + 1, e);
+
+        tree[node] = max(tree[left], tree[right]);
+    }
+
+public:
+    segTree(const vector<int> &a){
+        vc = a;
+        int n = vc.size() - 1;
+        tree.assign(4*n + 5, 0);
+        build(1, 1, n);
+    }
+
+    int query(int node, int b, int e, int i, int j){
+        if(j < b || i > e) return INT_MIN;
+        if(i <= b && j >= e) return tree[node];
+
+        int mid = (b + e) >> 1, left = node << 1, right = left | 1;
+        return max(query(left, b, mid, i, j), query(right, mid + 1, e, i, j));
+    }
+
+    void update(int node, int b, int e, int index){
+        if(index < b || index > e) return;
+        if(index == b && index == e){
+            tree[node] = vc[b];
+            return;
+        }
+
+        int mid = (b + e) >> 1, left = node << 1, right = left | 1;
+        build(left, b, mid); build(right, mid + 1, e);
+
+        tree[node] = max(tree[left], tree[right]);
+    }
+};
+
+
+
+
+
+// Spars table
+for(int i = 0; i < n; i += 1){
+        cin>> vc[i];
+        sm[i][0] = vc[i];
+    }
+
+    for(int sz = 1; sz <= m; sz += 1){
+        for(int index = 0; index + (1 << sz) - 1 < n; index += 1)   sm[index][sz] = min(sm[index][sz - 1], sm[index + (1 << (sz - 1))][sz - 1]);
+    }
+}
+
+
+
+
+
+// trie
+class node{
+public:
+    bool endmark;
+    node* next[27];
+
+    node(){
+        endmark = 0;
+        for(int i = 0; i < 26; i += 1) next[i] = NULL;
+    }
+};
+node* root;
+
+void Insert(string s){
+    node* curr = root;
+    for(char ch: s){
+        // First e root e achi tai etar next node theke dekhte hobe..
+        if(curr -> next[ch - 'a'] == NULL) curr -> next[ch - 'a'] = new node();
+
+        curr = curr -> next[ch - 'a'];
+        // ei node e dhukbo ekhn
+    }
+
+    curr -> endmark = 1;
+}
+
+bool Search(string s){
+    node* curr = root;
+    for(char ch: s){
+        if(curr -> next[ch - 'a'] == NULL) return 0;
+        curr = curr -> next[ch - 'a'];
+    }
+
+    return curr -> endmark;
+}
+
+void del(node* curr){
+    for(int i = 0; i < 26; i += 1){
+        if(curr -> next[i]) del(curr -> next[i]);
+    }
+
+    delete(curr);
+}
+
+
+
+
+
+// MST
+struct node{
+    int x, y, weight;
+    bool operator<(node const& other){
+        return weight < other.weight;
+    }
+};
+
+class dsu{
+public:
+    vector<int>parent, size;
+    dsu(int n){
+        size.resize(n + 1, 1);
+        parent.resize(n + 1);
+        for(int i = 1; i <= n; i++)
+            parent[i] = i;
+    }
+
+    int findRepresentative(int u){
+        if(u == parent[u])  return u;
+        else return parent[u] = findRepresentative(parent[u]);
+    }
+
+    void unionSet(int a, int b){
+        a = findRepresentative(a);
+        b = findRepresentative(b);
+
+        if(a != b){
+            if(size[b] > size[a])   swap(a, b);
+
+            parent[b] = a;
+            size[a] += size[b];
+        }
+    }
+};
+
+
+
+
+// MOD inverse
+int bigPOW(int a, int b){
+    if(!b)  return 1;
+    
+    int x = bigPOW(a, b/2)%MOD;
+    x = (x*x)%MOD;
+
+    b&1?x = (x*a)%MOD:1;
+    return x;
+}
+
+int modINVERSE(int a){
+    return bigPOW(a, MOD - 2);
+}
+
+
+//extended gcd
+int extendedGCD(int a, int b, int &x, int &y){
+    if(!a){
+        x = 0;
+        y = 1;
+        return b;
+    }
+    int x1, y1, gcd = extendedGCD(b%a, a, x1, y1);
+    
+    x = y1 - (b/a)*x1;
+    y = x1;
+    return gcd;
+}
+
+
+
+//ncr
+int ncr(int n, int r){
+    int dp[n + 1][r + 1];
+
+    for(int i = 0; i<=n; i += 1){
+        for(int j = 0; j<=min(i, r); j += 1){
+            // The condition here is min(i, r) because C(i, j) here j can not be greater than n( here i) and ofc same is true with r also.
+
+            if(!j || j == i)    dp[i][j] = 1;
+            else dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+        }
+    }
+
+    return dp[n][r];
+}
+
+
+// Prime using min divisors
+vector<int>mdv(n + 1, INT_MAX);
+for(int i = 2; i <= n; i += 1){
+    for(int j = i; j <= n; j += i) mdv[j] = min(mdv[j], i);
+}
+
+int q;
+cin>> q;
+while(q--){
+    int m;
+    cin>> m;
+    vector<int>div;
+    while(m > 1){
+        div.push_back(mdv[m]);
+        m /= mdv[m];
+    }
+
+    for(int X: div) cout<< X<<" ";
+    cout<< endl;
+}
+
+// kmp
+class KMP{
+    int n;
+    string text, pattern;
+    vector<int>failure;
+public:
+    KMP(string text, string pattern){
+        this -> text = text; this -> pattern = pattern;
+        n = pattern.size();
+        failure.resize(n, 0);
+    }
+
+    void genFailuretable(){
+        for(int i = 1; i < n; i += 1){
+            int j = failure[i - 1];
+            while(j > 0 && pattern[i] != pattern[j]) j = failure[j - 1];
+
+            if(pattern[i] == pattern[j]) failure[i] = j + 1;
+        }
+    }
+
+    int matchCnt(){
+        genFailuretable();
+        int k = 0, m = text.size(), matches = 0;
+        for(int i = 0; i < m; i += 1){
+            if(text[i] == pattern[k]){
+                k += 1;
+                if(k == n){
+                    k = 0; matches += 1;
+                }
+            }
+            else{
+                k = failure[k];
+                while(k > 0 && text[i] != pattern[k]) k = pattern[k]; 
+            }
+        }
+
+        return matches;
+    }
+};
+
+auto st = clock();
+cerr<<1.0*(clock() - st)/CLOCKS_PER_SEC << endl;
