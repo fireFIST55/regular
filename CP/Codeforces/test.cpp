@@ -3,10 +3,8 @@
 using namespace std;
 
 void solve(){
-    set<int>st;
-    for(int i = 1; i <= 5; i += 1) st.insert(i);
-    auto it = st.end(); it--;
-    cout << *it << endl;
+    int a = 'A';
+    cout << a << endl;
 }
 
 int main(void){
