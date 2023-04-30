@@ -9,87 +9,64 @@ public:
         for(int i = 0; i < 2; i += 1) next[i] = NULL;
     }
 };
-node* root;
+node *root;
 
-void Insert(int n){
-    node* curr = root;
+void insert(int x){
+    node *curr = root;
     for(int i = 31; i >= 0; i -= 1){
-        int id = (n & (1 << i))?1: 0;
-        if(curr -> next[id] == NULL) curr -> next[id] = new node();
-            
-        curr = curr -> next[id];
+        int bit = (x >> i) & 1;
+        if(!curr -> next[bit]) curr -> next[bit] = new node();
+        curr = curr -> next[bit];
     }
 }
 
-int SearchMX(int n){
-    int ans = 0;
-    node* curr = root;
+int search(int x, bool mx){
+    node *curr = root; int ans = 0;
     for(int i = 31; i >= 0; i -= 1){
-        int id = (n & (1 << i))?0: 1;
-        if(!(curr -> next[id]))
-            id = id?0: 1;
-        if(id) ans |= (1 << i);
-
-        curr = curr -> next[id];
+        int bit = (x >> i) & 1, to = mx?!bit: bit;
+        if(curr -> next[to]){
+            curr = curr -> next[to]; 
+            if((bit ^ to)) ans |= (1 << i);
+        }
+        else{
+            curr = curr -> next[!to];
+            if((bit ^ (!to))) ans |= (1 << i);
+        }
     }
-
-    return (ans ^ n);
-}
-
-int SearchMN(int n){
-    int ans = 0;
-    node* curr = root;
-    for(int i = 31; i >= 0; i -= 1){
-        int id = (n & (1 << i))?1: 0;
-        if(!(curr -> next[id])) id = id?0: 1;
-        if(id) ans |= (1 << i);
-
-        curr = curr -> next[id];
-    }
-
-    return (ans ^ n);
+    return ans;
 }
 
 void del(node* curr){
     for(int i = 0; i < 2; i += 1){
         if(curr -> next[i]) del(curr -> next[i]);
     }
-
     delete(curr);
 }
 
 void solve(){
-    root = new node();
-    int n, mx = 0, mn = INT_MAX; cin >> n;
-
-    int curr;
+    root = new node(); insert(0);
+    int n; cin >> n;
+    vector<int>vc(n);
+    for(int &i: vc) cin >> i;
+    int mx = 0, mn = INT_MAX, xxor = 0;
     for(int i = 0; i < n; i += 1){
-        int a; cin >> a;
-        curr = i?curr ^ a: a;
-        if(i){
-            mx = max(mx, max(curr, SearchMX(curr))); mn = min(mn, min(curr, SearchMN(curr)));
-        }
-        else mx = mn = curr;
-        Insert(curr);
+        xxor ^= vc[i];
+        mx = max(mx, search(xxor, 1)); mn = min(mn, search(xxor, 0)); 
+        insert(xxor);
     }
-
+    cout << mx << " " << mn << '\n';
     del(root);
-    cout << mx << " " << mn;
 }
 
 int main(void){
     ios_base::sync_with_stdio(false); 
-    cin.tie(nullptr);
+    cin.tie(NULL);
 
     int t = 1;
     cin >> t;
-
     for(int i = 1; i <= t; i += 1){
-        cout << "Case " << i << ": ";
-        solve();
-        if(i != t) cout << '\n';
-        else cout << '\n';
+        cout << "Case " << i << ": "; solve();
     }
-    
+
     return 0;
 }
